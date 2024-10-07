@@ -25,7 +25,7 @@ vueloValido (c1, c2, t) = (c1 /= c2) && (t > 0.00)
 
 pertenece :: Vuelo -> AgenciaDeViajes -> Bool
 pertenece _ [] = False
-pertenece v1 (v2:vs) = (v1 == v2) || pertenece v1 vs
+pertenece (v11, v12, t) ((v21, v22, t1):xs) = (v11 == v21 && v12 == v22) || pertenece (v11, v12, t) xs  
 
 
 -- EJERCICIO 2
@@ -51,6 +51,7 @@ quitar ciudad (x:xs) | ciudad == x = quitar ciudad xs
 
 
 -- EJERCICIO 3
+
 modernizarFlota :: AgenciaDeViajes -> AgenciaDeViajes
 modernizarFlota [] = []
 modernizarFlota ((origen, destino, duracion):xs) = (origen, destino, duracion * 0.9) : modernizarFlota xs
@@ -114,3 +115,5 @@ buscarRuta ((v11, v12, _):xs) origen destino | v11 == destino && v12 == origen =
                                              | v11 == destino = buscarRuta xs origen v12
                                              | v12 == origen = buscarRuta xs origen v11
                                              | otherwise = buscarRuta xs origen destino
+
+
