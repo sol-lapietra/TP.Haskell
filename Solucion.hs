@@ -1,10 +1,12 @@
+module Solucion where 
+
 {--
 Nombre del grupo: Askell
 Integrantes: 
 - Sol La Pietra: 46346822, lapietrasol@gmail.com
+- Almendra Gandini: 44668798, almendragandini1234@gmail.com
 -
--
--}
+--}
 
 type Ciudad = String
 type Duracion = Float
