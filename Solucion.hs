@@ -1,3 +1,11 @@
+{--
+Nombre del grupo: Askell
+Integrantes: 
+- Sol La Pietra: 46346822, lapietrasol@gmail.com
+-
+-
+-}
+
 type Ciudad = String
 type Duracion = Float
 type Vuelo = (Ciudad, Ciudad, Duracion)
