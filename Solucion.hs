@@ -121,14 +121,13 @@ buscarTiempoConEscala origen destino rutas visitados = buscarConEscala origen de
 
 buscarConEscala :: String -> String -> AgenciaDeViajes -> [String] -> Float
 buscarConEscala origen destino [] visitados = 0.00
-buscarConEscala origen destino ((o, intermedio, tiempo1):rutas) visitados | o == origen && intermedio `noEstaEn` visitados = tiempo1 + buscarRuta intermedio destino rutas visitados
+buscarConEscala origen destino ((o, intermedio, tiempo1):rutas) visitados | o == origen && (noEstaEn intermedio visitados) = tiempo1 + buscarRuta intermedio destino rutas visitados
                                                                           | otherwise = buscarConEscala origen destino rutas visitados
 
 noEstaEn :: String -> [String] -> Bool
 noEstaEn _ [] = True
-noEstaEn elemento (x:xs)
-    | elemento == x = False
-    | otherwise = noEstaEn elemento xs
+noEstaEn elemento (x:xs) | elemento == x = False
+                         | otherwise = noEstaEn elemento xs
 
 -- EJERCICIO 7
 puedoVolverAOrigen :: AgenciaDeViajes -> Ciudad -> Bool
