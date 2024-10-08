@@ -25,7 +25,7 @@ vueloValido (c1, c2, t) = (c1 /= c2) && (t > 0.00)
 
 pertenece :: Vuelo -> AgenciaDeViajes -> Bool
 pertenece _ [] = False
-pertenece (v11, v12, t) ((v21, v22, t1):xs) = (v11 == v21 && v12 == v22) || pertenece (v11, v12, t) xs  
+pertenece (v11, v12, t) ((v21, v22, _):xs) = (v11 == v21 && v12 == v22) || pertenece (v11, v12, t) xs
 
 
 -- EJERCICIO 2
@@ -51,7 +51,6 @@ quitar ciudad (x:xs) | ciudad == x = quitar ciudad xs
 
 
 -- EJERCICIO 3
-
 modernizarFlota :: AgenciaDeViajes -> AgenciaDeViajes
 modernizarFlota [] = []
 modernizarFlota ((origen, destino, duracion):xs) = (origen, destino, duracion * 0.9) : modernizarFlota xs
@@ -106,7 +105,7 @@ buscarRuta origen destino rutas visitados = minimo [tiempoDirecto, tiempoConEsca
 
 -- Busca el tiempo en un vuelo directo
 buscarTiempoDirecto :: String -> String -> AgenciaDeViajes -> Float
-buscarTiempoDirecto origen destino [] = 0.00
+buscarTiempoDirecto origen destino [] = 1/0               -- Uso un valor grande que no se alcanzaria en la lista para que no me de 0.00
 buscarTiempoDirecto origen destino ((o, d, duracion):rutas) | origen == o && destino == d = duracion
                                                             | otherwise = buscarTiempoDirecto origen destino rutas
 
@@ -127,20 +126,17 @@ buscarConEscala origen destino ((o, intermedio, tiempo1):rutas) visitados | o ==
 
 noEstaEn :: String -> [String] -> Bool
 noEstaEn _ [] = True
-noEstaEn elemento (x:xs) | elemento == x = False
-                         | otherwise = noEstaEn elemento xs
-
-
+noEstaEn elemento (x:xs)
+    | elemento == x = False
+    | otherwise = noEstaEn elemento xs
 
 -- EJERCICIO 7
 puedoVolverAOrigen :: AgenciaDeViajes -> Ciudad -> Bool
-puedoVolverAOrigen agencia origen = buscarRuta agencia origen origen
+puedoVolverAOrigen agencia origen = buscarRuta1 agencia origen origen
 
-buscarRuta :: AgenciaDeViajes -> Ciudad -> Ciudad -> Bool
-buscarRuta [] _ _ = False
-buscarRuta ((v11, v12, _):xs) origen destino | v11 == destino && v12 == origen = True
-                                             | v11 == destino = buscarRuta xs origen v12
-                                             | v12 == origen = buscarRuta xs origen v11
-                                             | otherwise = buscarRuta xs origen destino
-
-
+buscarRuta1 :: AgenciaDeViajes -> Ciudad -> Ciudad -> Bool
+buscarRuta1 [] _ _ = False
+buscarRuta1 ((v11, v12, _):xs) origen destino | v11 == destino && v12 == origen = True
+                                              | v11 == destino = buscarRuta1 xs origen v12
+                                              | v12 == origen = buscarRuta1 xs origen v11
+                                              | otherwise = buscarRuta1 xs origen destino
