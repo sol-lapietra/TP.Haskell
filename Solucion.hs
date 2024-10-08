@@ -98,34 +98,34 @@ hayVueloConEscala a b ((x, y, _):xs) = (x == a && hayVueloDirecto y b xs) || hay
 duracionDelCaminoMasRapido :: AgenciaDeViajes -> Ciudad -> Ciudad -> Duracion
 duracionDelCaminoMasRapido rutas origen destino = buscarRuta origen destino rutas []
 
-buscarRuta :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarRuta :: Ciudad -> Ciudad -> AgenciaDeViajes -> [Ciudad] -> Duracion
 buscarRuta origen destino rutas visitados = minimo [tiempoDirecto, tiempoConEscala]
   where
     tiempoDirecto = buscarTiempoDirecto origen destino rutas
     tiempoConEscala = buscarTiempoConEscala origen destino rutas visitados
 
 -- Busca el tiempo en un vuelo directo
-buscarTiempoDirecto :: String -> String -> AgenciaDeViajes -> Float
+buscarTiempoDirecto :: Ciudad -> Ciudad -> AgenciaDeViajes -> Duracion
 buscarTiempoDirecto origen destino [] = 1/0               -- Uso un valor grande que no se alcanzaria en la lista para que no me de 0.00
 buscarTiempoDirecto origen destino ((o, d, duracion):rutas) | origen == o && destino == d = duracion
                                                             | otherwise = buscarTiempoDirecto origen destino rutas
 
-minimo :: [Float] -> Float
+minimo :: [Duracion] -> Duracion
 minimo [] = 0.00
 minimo (x:[]) = x
 minimo (x:y:ys) | x < y = minimo (x:ys)
                 | otherwise = minimo (y:ys)
 
 -- Busca el tiempo con una escala
-buscarTiempoConEscala :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarTiempoConEscala :: Ciudad -> Ciudad -> AgenciaDeViajes -> [Ciudad] -> Duracion
 buscarTiempoConEscala origen destino rutas visitados = buscarConEscala origen destino rutas (origen : visitados)
 
-buscarConEscala :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarConEscala ::  Ciudad -> Ciudad -> AgenciaDeViajes -> [Ciudad] -> Duracion
 buscarConEscala origen destino [] visitados = 0.00
 buscarConEscala origen destino ((o, intermedio, tiempo1):rutas) visitados | o == origen && (noEstaEn intermedio visitados) = tiempo1 + buscarRuta intermedio destino rutas visitados
                                                                           | otherwise = buscarConEscala origen destino rutas visitados
 
-noEstaEn :: String -> [String] -> Bool
+noEstaEn :: Ciudad -> [Ciudad] -> Bool
 noEstaEn _ [] = True
 noEstaEn elemento (x:xs) | elemento == x = False
                          | otherwise = noEstaEn elemento xs
