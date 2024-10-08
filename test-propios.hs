@@ -1,3 +1,4 @@
+
 import Test.HUnit
 import Data.List
 import Solucion
@@ -7,7 +8,7 @@ runCatedraTests = runTestTT allTests
 allTests = test [
     "vuelosValidos" ~: testsEjvuelosValidos,
     "ciudadesConectadas" ~: testsEjciudadesConectadas,
-  --  "modernizarFlota" ~: testsEjmodernizarFlota,
+    "modernizarFlota" ~: testsEjmodernizarFlota,
     "ciudadMasConectada" ~: testsEjciudadMasConectada,
     "sePuedeLlegar" ~: testsEjsePuedeLlegar,
     "duracionDelCaminoMasRapido" ~: testsEjduracionDelCaminoMasRapido,
@@ -39,14 +40,14 @@ testsEjciudadesConectadas = test [    -- YA LO REVISE
     "ciudades conectadas con 2 ciudades"~: expectPermutacion (ciudadesConectadas  [("BsAs", "Rosario", 5.0),("Rosario","BsAs",3.4),("BsAs","Jujuy",5.6),("Jujuy","Corrientes",2.3)] "BsAs") ["Rosario","Jujuy"]
     ]
 
-{---
+
 testsEjmodernizarFlota = test [       -- YA LO REVISE
-    "flota modernizada con un elemento" ~: expectlistProximity (modernizarFlota [("BsAs", "Rosario", 10.0)]) [("BsAs", "Rosario", 9.0)],
-    "flota modernizada con dos elemento" ~: expectlistProximity (modernizarFlota [("BsAs", "Chubut", 10.0),("Chubut","Salta",9.8)]) [("BsAs", "Chubut", 9.0),("Chubut","Salta",8.82)],
-    "no hay oferta de vuelos" ~: modernizarFlota [] ~?= []
+    "flota modernizada con un elemento" ~:  expectlistProximity (modernizarFlota [("BsAs", "Rosario", 10.0)]) [("BsAs", "Rosario", 9.0)],
+    "flota modernizada con dos elemento" ~:  expectlistProximity(modernizarFlota [("BsAs", "Chubut", 10.0),("Chubut","Salta",9.8)]) [("BsAs", "Chubut", 9.0),("Chubut","Salta",8.82)],
+    "no hay oferta de vuelos" ~: modernizarFlota [] ~?= [],
     "vuelos con duraciones muy bajas"~: expectlistProximity (modernizarFlota [("BsAs", "Rosario", 0.1)]) [("BsAs", "Rosario", 0.09)]
     ]
----}
+
 
 testsEjciudadMasConectada = test [ -- YA LO REVISE
     "ciudad mas conectada que aparece dos veces" ~: ciudadMasConectada [("BsAs", "Rosario", 10.0), ("Rosario", "Córdoba", 7.0)] ~?= "Rosario",
@@ -73,13 +74,13 @@ testsEjsePuedeLlegar = test [ --YA LO REVISE
     "sin vuelos disponibles" ~: sePuedeLlegar [] "BsAs" "Córdoba" ~?= False
     ]
 
-testsEjduracionDelCaminoMasRapido = test [ -- ACA HAY QUE AGRERAR APROXIMADO
-    "duración del camino más rápido con una escala" ~: duracionDelCaminoMasRapido [("BsAs", "Rosario", 5.0), ("Rosario", "Córdoba", 5.0), ("Córdoba", "BsAs", 8.0)] "BsAs" "Córdoba" ~?= 10.0,
-    "duración del camino más rápido sin escala" ~: duracionDelCaminoMasRapido [("BsAs", "Rosario", 1.2)] "BsAs" "Rosario" ~?= 1.2,
-    "duración del camino más rápido sin escala con vuelos en ambos sentidos " ~: duracionDelCaminoMasRapido [("Corrientes", "Rosario", 4.3),("Rosario","Corrientes",4.2)] "Corrientes" "Rosario" ~?= 4.3,
-    "duración del camino más rápido con una escala" ~: duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Santa Fe","BsAs",9.3),("Rosario","Salta",4.8)] "Rosario" "Salta" ~?= 4.8,
-    "directo más rapida"  ~: duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Jujuy","BsAs",9.3),("Rosario","BsAs",10.2)] "Rosario" "BsAs" ~?= 10.2,
-    "escala más rápido"  ~: duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Jujuy","BsAs",9.3),("Rosario","BsAs",15.6)] "Rosario" "BsAs" ~?= 14.3
+testsEjduracionDelCaminoMasRapido = test [
+    "duración del camino más rápido con una escala" ~: expectAproximado (duracionDelCaminoMasRapido [("BsAs", "Rosario", 5.0), ("Rosario", "Córdoba", 5.0), ("Córdoba", "BsAs", 8.0)] "BsAs" "Córdoba" ) 10.0,
+    "duración del camino más rápido sin escala" ~: expectAproximado (duracionDelCaminoMasRapido [("BsAs", "Rosario", 1.2)] "BsAs" "Rosario")  1.2,
+    "duración del camino más rápido sin escala con vuelos en ambos sentidos " ~: expectAproximado (duracionDelCaminoMasRapido [("Corrientes", "Rosario", 4.3),("Rosario","Corrientes",4.2)] "Corrientes" "Rosario") 4.3,
+    "duración del camino más rápido con una escala" ~: expectAproximado (duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Santa Fe","BsAs",9.3),("Rosario","Salta",4.8)] "Rosario" "Salta") 4.8,
+    "directo más rapida"  ~: expectAproximado( duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Jujuy","BsAs",9.3),("Rosario","BsAs",10.2)] "Rosario" "BsAs" ) 10.2,
+    "escala más rápido"  ~: expectAproximado(duracionDelCaminoMasRapido [("Rosario","Jujuy", 5.0),("Jujuy","BsAs",9.3),("Rosario","BsAs",15.6)] "Rosario" "BsAs" ) 14.3
     ]
 
 testsEjpuedoVolverAOrigen = test [
@@ -104,38 +105,37 @@ expectAny :: (Foldable t, Eq a, Show a, Show (t a)) => a -> t a -> Test
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
 
 
--- expectlistProximity (actual: [Float], expected: [Float]): Test
+-- expectlistProximity (actual: [StringxStringxFloat], expected: [StringxStringxFloat]): Test
 -- asegura: res es un Test Verdadero si y sólo si:
 --                  |actual| = |expected|
---                  para todo i entero tal que 0<=i<|actual|, |actual[i] - expected[i]| < margenFloat()
+--                  para algun elemento t de actual existe un elemento x de expected tal que |t3-x3| < margenFloat
 
-expectlistProximity:: [Float] -> [Float] -> Test
+expectlistProximity:: [(String,String,Float)] -> [(String,String,Float)] -> Test
 expectlistProximity actual expected = esParecidoLista actual expected ~? ("expected list: " ++ show expected ++ "\nbut got: " ++ show actual)
 
-esParecidoLista :: [Float] -> [Float] -> Bool
-esParecidoLista actual expected = (length actual) == (length expected) && (esParecidoUnaAUno actual expected)
+esParecidoLista :: [(String,String,Float)] -> [(String,String,Float)] -> Bool
+esParecidoLista actual expected = (length actual) == (length expected) && (esParecidoDeAUno actual expected)
 
-esParecidoUnaAUno :: [Float] -> [Float] -> Bool
-esParecidoUnaAUno [] [] = True
-esParecidoUnaAUno (x:xs) (y:ys) = (aproximado x y) && (esParecidoUnaAUno xs ys)
+esParecidoDeAUno :: [(String,String,Float)] -> [(String,String,Float)] -> Bool
+esParecidoDeAUno [] _ = True
+esParecidoDeAUno (x:xs) list2 = hayAproxEnLista x list2 && esParecidoDeAUno xs list2
+
+hayAproxEnLista :: (String,String,Float) -> [(String,String,Float)] -> Bool
+hayAproxEnLista _ [] = False
+
+hayAproxEnLista (ac1,ac2,af) ((bc1,bc2,bf):xs) 
+    | ac1 == bc1 && ac2 == bc2 = aproximado af bf
+    |otherwise = hayAproxEnLista (ac1,ac2,af) xs
+
+-- expectAproximado (actual: Float, expected: Float):Test
+--asegura : res es un test verdadero si y sólo si:
+--                  | actual - expected | < margenFloat
+
+expectAproximado :: Float -> Float -> Test
+expectAproximado actual expected = aproximado actual expected ~? ("expected approximation: " ++ show expected ++ "\nbut got: " ++ show actual)
 
 aproximado :: Float -> Float -> Bool
 aproximado x y = abs (x - y) < margenFloat
-
---expectAnyTuplaAprox (actual: CharxFloat, expected: [CharxFloat]): Test
---  asegura: res un Test Verdadero si y sólo si:
---                  para algun i entero tal que 0<=i<|expected|,
---                         (fst expected[i]) == (fst actual) && |(snd expected[i]) - (snd actual)| < margenFloat()
-
-expectAnyTuplaAprox :: (Char, Float) -> [(Char, Float)] -> Test
-expectAnyTuplaAprox actual expected = elemAproxTupla actual expected ~? ("expected any of: " ++ show expected ++ "\nbut got: " ++ show actual)
-
-elemAproxTupla :: (Char, Float) -> [(Char, Float)] -> Bool
-elemAproxTupla _ [] = False
-elemAproxTupla (ac,af) ((bc,bf):bs) = sonAprox || (elemAproxTupla (ac,af) bs)
-    where sonAprox = (ac == bc) && (aproximado af bf)
-
-
 
 -- expectPermutacion (actual: [T], expected[T]) : Test
 -- asegura: res es un Test Verdadero si y sólo si:
@@ -146,4 +146,4 @@ expectPermutacion actual expected = esPermutacion actual expected ~? ("expected 
 
 esPermutacion :: Ord a => [a] -> [a] -> Bool
 esPermutacion a b = (length a == length b) && (sort a == sort b)
----}
+---
