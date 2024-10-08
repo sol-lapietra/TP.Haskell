@@ -15,7 +15,7 @@ allTests = test [
     "puedoVolverAOrigen" ~: testsEjpuedoVolverAOrigen
     ]
 
-testsEjvuelosValidos = test [         --YA LO REVISE
+testsEjvuelosValidos = test [       
     "vuelo válido con un solo elemento" ~: vuelosValidos [("BsAs", "Rosario", 5.0)] ~?= True, 
     "no hay vuelos disponibles"~: vuelosValidos [] ~?= True,
     "vuelos de ida y vuelta" ~: vuelosValidos [("BsAs", "Rosario", 5.0), ("Rosario", "BsAs", 5.0)] ~?= True,
@@ -28,7 +28,7 @@ testsEjvuelosValidos = test [         --YA LO REVISE
     "vuelo válido mezclado con un inválido" ~: vuelosValidos [("BsAs", "Rosario", 5.0), ("Mendoza", "Jujuy", 0.0)] ~?= False
     ]
 
-testsEjciudadesConectadas = test [    -- YA LO REVISE
+testsEjciudadesConectadas = test [    
     "ciudad conectada con un elemento (destino)" ~: ciudadesConectadas  [("BsAs", "Rosario", 5.0)] "Rosario" ~?= ["BsAs"],
     "ciudad conectada con un elemento (origen)" ~: ciudadesConectadas  [("BsAs", "Rosario", 5.0)] "BsAs" ~?= ["Rosario"],
     "ciudad conectada con múltiples conexiones" ~: expectPermutacion(ciudadesConectadas [("BsAs", "Rosario", 5.0), ("BsAs", "Córdoba", 4.0)] "BsAs") ["Rosario", "Córdoba"],
@@ -41,7 +41,7 @@ testsEjciudadesConectadas = test [    -- YA LO REVISE
     ]
 
 
-testsEjmodernizarFlota = test [       -- YA LO REVISE
+testsEjmodernizarFlota = test [     
     "flota modernizada con un elemento" ~:  expectlistProximity (modernizarFlota [("BsAs", "Rosario", 10.0)]) [("BsAs", "Rosario", 9.0)],
     "flota modernizada con dos elemento" ~:  expectlistProximity(modernizarFlota [("BsAs", "Chubut", 10.0),("Chubut","Salta",9.8)]) [("BsAs", "Chubut", 9.0),("Chubut","Salta",8.82)],
     "no hay oferta de vuelos" ~: modernizarFlota [] ~?= [],
@@ -49,7 +49,7 @@ testsEjmodernizarFlota = test [       -- YA LO REVISE
     ]
 
 
-testsEjciudadMasConectada = test [ -- YA LO REVISE
+testsEjciudadMasConectada = test [
     "ciudad mas conectada que aparece dos veces" ~: ciudadMasConectada [("BsAs", "Rosario", 10.0), ("Rosario", "Córdoba", 7.0)] ~?= "Rosario",
     "ciudad mas conectada con un solo vuelo" ~: expectAny (ciudadMasConectada [("BsAs", "Rosario", 10.0)]) ["BsAs","Rosario"],
     "caso empate" ~: expectAny (ciudadMasConectada  [("BsAs", "Rosario", 10.0), ("Rosario", "Cordoba", 7.0),("BsAs", "Salta", 7.0)]) ["BsAs","Rosario"],
@@ -62,7 +62,7 @@ testsEjciudadMasConectada = test [ -- YA LO REVISE
     "ciudades con vuelos ida-vuelta (una sola conexion) (2)" ~: expectAny (ciudadMasConectada [("BsAs", "Rosario", 10.0), ("Rosario", "BsAs", 10.0)]) ["BsAs", "Rosario"]
     ]
 
-testsEjsePuedeLlegar = test [ --YA LO REVISE
+testsEjsePuedeLlegar = test [ 
     "Se puede llegar caso verdadero con una escala" ~: sePuedeLlegar [("BsAs", "Rosario", 5.0), ("Rosario", "Córdoba", 5.0), ("Córdoba", "BsAs", 8.0)] "BsAs" "Córdoba" ~?= True,
     "Se puede llegar directo" ~: sePuedeLlegar [("Entre Rios", "Rosario", 5.0)] "Entre Rios" "Rosario" ~?= True,
     "No se puede llegar, destino y origen invertidos" ~: sePuedeLlegar [("Entre Rios", "Rosario", 5.0)] "Rosario" "Entre Rios" ~?= False,
