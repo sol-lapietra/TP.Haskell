@@ -95,14 +95,41 @@ hayVueloConEscala a b ((x, y, _):xs) = (x == a && hayVueloDirecto y b xs) || hay
 
 
 -- EJERCICIO 6
-duracionDelCaminoMasRapido :: AgenciaDeViajes -> Ciudad -> Ciudad -> Duracion
-duracionDelCaminoMasRapido [(v11, v12, t)] c1 c2 | v11 == c1 && v12 == c2 = t  -- vuelo directo
-duracionDelCaminoMasRapido ((v11, v12, t):(v21, v22, t1):xs) c1 c2 | v11 == c1 && v12 == c2 = t  
-                                                                   | v11 == c1 && v12 == v21 && v22 == c2 = menor (t + t1) (duracionDelCaminoMasRapido ((v21, v22, t1):xs) c1 c2)
-                                                                   | otherwise = duracionDelCaminoMasRapido ((v21, v22, t1):xs) c1 c2
-menor :: Duracion -> Duracion -> Duracion
-menor x y | x < y = x
-          | otherwise = y
+duracionDelCaminoMasRapido :: AgenciaDeViajes -> String -> String -> Float
+duracionDelCaminoMasRapido rutas origen destino = buscarRuta origen destino rutas []
+
+buscarRuta :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarRuta origen destino rutas visitados = minimo [tiempoDirecto, tiempoConEscala]
+  where
+    tiempoDirecto = buscarTiempoDirecto origen destino rutas
+    tiempoConEscala = buscarTiempoConEscala origen destino rutas visitados
+
+-- Busca el tiempo en un vuelo directo
+buscarTiempoDirecto :: String -> String -> AgenciaDeViajes -> Float
+buscarTiempoDirecto origen destino [] = 0.00
+buscarTiempoDirecto origen destino ((o, d, duracion):rutas) | origen == o && destino == d = duracion
+                                                            | otherwise = buscarTiempoDirecto origen destino rutas
+
+minimo :: [Float] -> Float
+minimo [] = 0.00
+minimo (x:[]) = x
+minimo (x:y:ys) | x < y = minimo (x:ys)
+                | otherwise = minimo (y:ys)
+
+-- Busca el tiempo con una escala
+buscarTiempoConEscala :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarTiempoConEscala origen destino rutas visitados = buscarConEscala origen destino rutas (origen : visitados)
+
+buscarConEscala :: String -> String -> AgenciaDeViajes -> [String] -> Float
+buscarConEscala origen destino [] visitados = 0.00
+buscarConEscala origen destino ((o, intermedio, tiempo1):rutas) visitados | o == origen && intermedio `noEstaEn` visitados = tiempo1 + buscarRuta intermedio destino rutas visitados
+                                                                          | otherwise = buscarConEscala origen destino rutas visitados
+
+noEstaEn :: String -> [String] -> Bool
+noEstaEn _ [] = True
+noEstaEn elemento (x:xs) | elemento == x = False
+                         | otherwise = noEstaEn elemento xs
+
 
 
 -- EJERCICIO 7
