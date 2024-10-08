@@ -30,13 +30,13 @@ testsEjvuelosValidos = test [         --YA LO REVISE
 testsEjciudadesConectadas = test [    -- YA LO REVISE
     "ciudad conectada con un elemento (destino)" ~: ciudadesConectadas  [("BsAs", "Rosario", 5.0)] "Rosario" ~?= ["BsAs"],
     "ciudad conectada con un elemento (origen)" ~: ciudadesConectadas  [("BsAs", "Rosario", 5.0)] "BsAs" ~?= ["Rosario"],
-    "ciudad conectada con múltiples conexiones" ~: ciudadesConectadas [("BsAs", "Rosario", 5.0), ("BsAs", "Córdoba", 4.0)] "BsAs" ~?= ["Rosario", "Córdoba"],
+    "ciudad conectada con múltiples conexiones" ~: expectPermutacion(ciudadesConectadas [("BsAs", "Rosario", 5.0), ("BsAs", "Córdoba", 4.0)] "BsAs") ["Rosario", "Córdoba"],
     "ciudad conectada sin vuelos" ~: ciudadesConectadas [] "Rosario" ~?= [],
     "ciudad no conectada" ~: ciudadesConectadas  [("BsAs","Tucumán",3.7)] "Salta" ~?= [],
     "ciudad conectada una vez" ~: ciudadesConectadas  [("BsAs","Tucumán",3.7),("Tucumán","Rosario",1.2)] "Rosario" ~?= ["Tucumán"],
     "ciudad conectada con un vuelo" ~: ciudadesConectadas [("Madrid", "Barcelona", 2.0), ("Barcelona", "Madrid", 3.0), ("Madrid", "Valencia", 1.5)] "Barcelona" ~?= ["Madrid"],
     "ciudad conectada desde ciudad"~: ciudadesConectadas  [("BsAs","Tucumán",2.7)] "BsAs" ~?= ["Tucumán"],
-    "ciudades conectadas con 2 ciudades"~: ciudadesConectadas  [("BsAs", "Rosario", 5.0),("Rosario","BsAs",3.4),("BsAs","Jujuy",5.6),("Jujuy","Corrientes",2.3)] "BsAs" ~?= ["Rosario","Jujuy"]
+    "ciudades conectadas con 2 ciudades"~: expectPermutacion (ciudadesConectadas  [("BsAs", "Rosario", 5.0),("Rosario","BsAs",3.4),("BsAs","Jujuy",5.6),("Jujuy","Corrientes",2.3)] "BsAs") ["Rosario","Jujuy"]
     ]
 
 {---
