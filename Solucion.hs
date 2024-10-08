@@ -94,7 +94,8 @@ hayVueloConEscala a b ((x, y, _):xs) = (x == a && hayVueloDirecto y b xs) || hay
 
 
 -- EJERCICIO 6
-duracionDelCaminoMasRapido :: AgenciaDeViajes -> String -> String -> Float
+
+duracionDelCaminoMasRapido :: AgenciaDeViajes -> Ciudad -> Ciudad -> Duracion
 duracionDelCaminoMasRapido rutas origen destino = buscarRuta origen destino rutas []
 
 buscarRuta :: String -> String -> AgenciaDeViajes -> [String] -> Float
